@@ -28,17 +28,14 @@ runs:
       boilerplate = File.readlines(boilerplate_path)
       errors = 0
 
-      Dir.glob("**/*.go").each do |p|
+      Dir.glob("#{base_path}/**/*.go").each do |p|
         file = File.readlines(p)
-        file.each_with_index do |line,i|
-          next if line =~ /^\/\/go:build/
-          next if line =~ /^\/\/\s*\+build/
-          next if line =~ /^\s*$/
-          if file[i,boilerplate.size] != boilerplate then
-            STDERR.puts "#{p}: bad or missing license header"
-            errors += 1
-          end
-          break
+        i = file.index(boilerplate.first)
+        j = file.index(boilerplate.last)
+        b = file[i,j-i+1]
+        if b-(b-boilerplate) != boilerplate then
+          STDERR.puts "#{p}: bad or missing license header"
+          errors += 1
         end
       end
 
