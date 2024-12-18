@@ -19,7 +19,7 @@ runs:
       base_path = ENV["INPUT_BASE_PATH"]
       raise "Input parameter base-path must not start with slash" if base_path.start_with?("/")
       raise "Input parameter base-path must not be empty" if base_path.empty?
-      raise "Specified base-path does not exist: #{base_path}" if !Dir.exists?(base_path)
+      raise "Specified base-path does not exist: #{base_path}" if !Dir.exist?(base_path)
 
       boilerplate_path = ENV["INPUT_BOILERPLATE_PATH"]
       raise "Input parameter boilerplate-path must not start with slash" if boilerplate_path.start_with?("/")
