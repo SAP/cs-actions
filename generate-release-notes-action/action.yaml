@@ -1,0 +1,43 @@
+name: "Generate release notes"
+description: "Generates categorized release notes from conventional commits between two tags using the GitHub Compare API"
+
+inputs:
+  personal-token:
+    description: "Personal access token (must have repo read access)"
+    required: true
+  previous-tag:
+    description: "The tag of the previous release (e.g., v1.2.3). Empty or v0.0.0 triggers initial-release output."
+    required: true
+  new-tag:
+    description: "The tag being created (used for display in notes)"
+    required: true
+  target-ref:
+    description: "The branch or commit SHA to compare against the previous tag"
+    required: false
+    default: "main"
+  exclude-authors:
+    description: "Comma-separated list of commit author names to exclude from notes"
+    required: false
+    default: ""
+
+outputs:
+  release-notes:
+    description: "The generated Markdown release notes"
+    value: ${{ steps.generate.outputs.release-notes }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Generate release notes
+      id: generate
+      env:
+        INPUT_PREVIOUS_TAG: ${{ inputs.previous-tag }}
+        INPUT_NEW_TAG: ${{ inputs.new-tag }}
+        INPUT_TARGET_REF: ${{ inputs.target-ref }}
+        INPUT_TOKEN: ${{ inputs.personal-token }}
+        INPUT_EXCLUDE_AUTHORS: ${{ inputs.exclude-authors }}
+        REPO: ${{ github.repository }}
+        API_URL: ${{ github.api_url }}
+        SERVER_URL: ${{ github.server_url }}
+      run: ${{ github.action_path }}/generate-release-notes.sh
+      shell: bash
