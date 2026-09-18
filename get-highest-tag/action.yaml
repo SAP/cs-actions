@@ -10,5 +10,5 @@ outputs:
   version:
     description: Highest version (i.e. determined highest tag, stripped by prefix)
 runs:
-  using: node16
+  using: node24
   main: dist/index.js
